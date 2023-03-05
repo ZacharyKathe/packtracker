@@ -1,0 +1,23 @@
+type Pack @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Name: String
+  PackSize: Float
+  tripsID: ID! @index(name: "byTrips")
+}
+
+type Trips @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  TripName: String
+  TripStart: AWSDate
+  TripEnd: AWSDate
+  TripLocation: String
+  usersID: ID! @index(name: "byUsers")
+  Packs: [Pack] @hasMany(indexName: "byTrips", fields: ["id"])
+}
+
+type Users @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Name: String
+  Email: AWSEmail
+  Trips: [Trips] @hasMany(indexName: "byUsers", fields: ["id"])
+}
